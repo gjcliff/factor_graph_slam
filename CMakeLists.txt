@@ -1,15 +1,26 @@
 cmake_minimum_required(VERSION 3.8)
 project(factor_graph_slam)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+set(GTSAM_DIR "/usr/local/lib/cmake/GTSAM/")
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(GTSAM REQUIRED)
+
+add_executable(ekf src/ekf.cpp)
+
+ament_target_dependencies(ekf ament_cmake rclcpp std_msgs GTSAM)
+include_directories(${GTSAM_INCLUDE_DIRS})
+
+# target_link_libraries(ekf gtsam)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
